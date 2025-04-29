@@ -199,6 +199,37 @@ FROM orders
 GROUP BY order_id
     ) AS order_product_counts;
 
+## SQL Queries for Customer Segmentation
+### New Customers
+> I ran query for Customers who made their first (and possibly only) purchase recently,let's say within the last 30 days.
+
+SELECT DISTINCT customers.customer_id, customers.customer_name, MIN(order.order_date) AS first_purchase_date
+FROM Customers 
+JOIN Orders ON customers.customer_id = orders.customer_id
+GROUP BY customers.customer_id, customers.customer_name
+HAVING first_purchase_date >= CURDATE() - INTERVAL 30 DAY;
+
+### Repeat Customers
+> I also checked for Customers who have placed more than one order.
+
+SELECT customers.customer_id, customers.customer_name, COUNT(order.order_id) AS number_of_orders
+FROM Customers 
+JOIN Orders ON customers.customer_id = orders.customer_id
+GROUP BY customers.customer_id, customers.customer_name
+HAVING number_of_orders > 1
+ORDER BY number_of_orders DESC;
+
+### High-Value Customers
+> Customers who have spent the most money usually define a threshold like top 10%.
+
+SELECT customers.customer_id, customers.customer_name, SUM(order.total_price) AS total_spent
+FROM Customers 
+JOIN Orders ON customers.customer_id = orders.customer_id
+GROUP BY customers.customer_id, customers.customer_name
+ORDER BY total_spent DESC
+LIMIT 10;
+
+
 
 
 
