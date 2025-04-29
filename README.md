@@ -137,7 +137,8 @@ LEFT JOIN active_customers ON all_customers.customer_id = active_customers.custo
 
 #### 10. Find the most popular products in a specific category.
 
-SELECT products.product_id, products.product_name, products.product_category, SUM(orders.quantity) AS total_sold
+SELECT products.product_id, products.product_name, products.product_category, SUM(orders.quantity)
+AS total_sold
 FROM products 
 JOIN orders  ON products.product_id = orders.product_id
 WHERE products.product_category = 'Electronics'  
@@ -150,7 +151,7 @@ LIMIT 10;
 SELECT products.product_id, products.product_name, products.product_category
 FROM products 
 LEFT JOIN orders ON products.product_id = orders.product_id 
-    AND orders.order_date >= DATE_SUB(CURDATE(), INTERVAL 3 MONTH)
+AND orders.order_date >= DATE_SUB(CURDATE(), INTERVAL 3 MONTH)
 WHERE orders.product_id IS NULL;
 
 #### 12. Calculate the average transaction value for each customer.
@@ -192,10 +193,11 @@ LIMIT 10;
 SELECT 
     ROUND(AVG(product_count), 2) AS avg_products_per_order
 FROM (
-    SELECT order_id, COUNT(product_id) AS product_count
-    FROM orders
-    GROUP BY order_id
-) AS order_product_counts;
+    SELECT order_id, COUNT(product_id)
+AS product_count
+FROM orders
+GROUP BY order_id
+    ) AS order_product_counts;
 
 
 
