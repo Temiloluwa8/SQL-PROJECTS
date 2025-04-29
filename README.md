@@ -199,6 +199,8 @@ FROM orders
 GROUP BY order_id
     ) AS order_product_counts;
 
+
+---
 ## SQL Queries for Customer Segmentation
 ### New Customers
 > I ran query for Customers who made their first (and possibly only) purchase recently,let's say within the last 30 days.
@@ -229,6 +231,74 @@ GROUP BY customers.customer_id, customers.customer_name
 ORDER BY total_spent DESC
 LIMIT 10;
 
+---
+## SQL Queries for Time Series Sales Analysis
+### Monthly Revenue
+
+SELECT 
+    DATE_FORMAT(order_date, '%Y-%m') AS month,
+    SUM(total_price) AS monthly_revenue
+FROM Orders
+GROUP BY month
+ORDER BY month;
+### Quarterly Revenue
+
+SELECT 
+    CONCAT(YEAR(order_date), '-Q', QUARTER(order_date)) AS quarter,
+    SUM(total_price) AS quarterly_revenue
+FROM Orders
+GROUP BY quarter
+ORDER BY quarter;
+### Identify Peak Sales Months
+
+SELECT 
+    DATE_FORMAT(order_date, '%Y-%m') AS month,
+    SUM(total_price) AS monthly_revenue
+FROM Orders
+GROUP BY month
+ORDER BY monthly_revenue DESC
+LIMIT 3;
+
+
+---
+## SQL Queries for Product Analysis
+
+SELECT 
+    products.category,
+    products.product_name,
+    SUM(orders.quantity) AS total_units_sold
+FROM Products 
+JOIN Orders ON products.product_id = orders.product_id
+GROUP BY products.category, products.product_name
+ORDER BY products.category, total_units_sold DESC;
+
+### Find Products with Declining Sales
+
+SELECT 
+    p.product_name,
+    SUM(CASE WHEN YEAR(orders.order_date) = YEAR(CURDATE()) - 1 THEN orders.quantity ELSE 0 END) AS last_year_sales,
+    SUM(CASE WHEN YEAR(orders.order_date) = YEAR(CURDATE()) THEN orders.quantity ELSE 0 END) AS this_year_sales
+FROM Products 
+JOIN Orders ON products.product_id = orders.product_id
+GROUP BY products.product_name
+HAVING this_year_sales < last_year_sales;
+### Determine Average Order Size
+
+SELECT 
+    AVG(quantity) AS average_order_size
+FROM Orders;
+
+---
+## Conclusion
+  In conclusion, This SQL-based project provided key insights into customer behavior, product performance, and overall sales trends for an e-commerce business. Using MySQL, we built a relational database from customer, order, and product data, then performed structured analysis to drive business decisions.
+##### Key highlights include:
++ Customer Segmentation: We identified new, repeat, and high-value customers to tailor marketing and retention strategies.
+
++ Sales Trend Analysis: Monthly and quarterly revenue tracking revealed peak sales periods and seasonal patterns.
+
++ Product Insights: Best-sellers by category, declining products, and average order size were analyzed to inform inventory and pricing decisions.
+
+    These analyses demonstrate how SQL can turn raw transactional data into actionable business intelligence. The techniques applied here—joins, aggregations, filtering, and time-based grouping—reflect real-world skills used by data analysts and business intelligence teams.
 
 
 
