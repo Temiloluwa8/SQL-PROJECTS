@@ -290,7 +290,7 @@ FROM Orders;
 
 ---
 ## Conclusion
-  In conclusion, This SQL-based project provided key insights into customer behavior, product performance, and overall sales trends for an e-commerce business. Using MySQL, we built a relational database from customer, order, and product data, then performed structured analysis to drive business decisions.
+  In Conclusion, This SQL-based project provided key insights into customer behavior, product performance, and overall sales trends for an e-commerce business. Using MySQL, we built a relational database from customer, order, and product data, then performed structured analysis to drive business decisions.
 ##### Key highlights include:
 + Customer Segmentation: We identified new, repeat, and high-value customers to tailor marketing and retention strategies.
 
