@@ -40,7 +40,7 @@ I sampled the following business questions to explore and understand the dataset
 + Identify the days with the highest number of sales.
 + Calculate the average number of products included in each order.
 ### SQL Queries
-Use ecommerce;
+```sql
 #### 1. List top-selling products.
 
 SELECT products.product_id, products.product_name, products.product_category, SUM(orders.quantity) AS total_sold  
@@ -49,13 +49,17 @@ JOIN orders ON products.product_id = orders.product_id
 GROUP BY products.product_id, products.product_name, products.product_category  
 ORDER BY total_sold DESC  
 LIMIT 10;
+```
 
+```sql
 #### 2. Find the total revenue generated.
 
 SELECT SUM(orders.quantity * products.product_price) AS total_revenue  
 FROM orders   
 JOIN products  ON orders.product_id = products.product_id;
+```
 
+```sql
 #### 3. Identify the most valuable customers
 SELECT customers.customer_id, CONCAT(customers.first_name, ' ', customers.last_name) AS customer_name,
        SUM(orders.quantity * products.product_price) AS total_spent  
@@ -65,13 +69,17 @@ JOIN products ON orders.product_id = products.product_id
 GROUP BY customers.customer_id, customer_name  
 ORDER BY total_spent DESC  
 LIMIT 10;
+```
 
+```sql
 #### 4. Calculate the average order value.
 
 SELECT SUM(orders.quantity * products.product_price) / COUNT(DISTINCT orders.order_id) AS avg_order_value  
 FROM orders 
 JOIN products ON orders.product_id = products.product_id;
+```
 
+```sql
 #### 5. Break down the total revenue by month
 
 SELECT 
@@ -82,7 +90,9 @@ FROM orders
 JOIN products  ON orders.product_id = products.product_id  
 GROUP BY YEAR(orders.order_date), MONTH(orders.order_date)  
 ORDER BY year, month;
+```
 
+```sql
 #### 6. Retrieve the purchase history for a specific customer.
 
 SELECT 
@@ -100,7 +110,9 @@ JOIN orders ON customers.customer_id = orders.customer_id
 JOIN products ON orders.product_id = products.product_id  
 WHERE customers.customer_id  = 1 
 ORDER BY orders.order_date DESC;
+```
 
+```sql
 #### 7. Identify the top product categories by total revenue.
 
 SELECT 
@@ -111,7 +123,9 @@ JOIN products ON orders.product_id = products.product_id
 GROUP BY products.product_category  
 ORDER BY total_revenue DESC  
 LIMIT 10;
+```
 
+```sql
 #### 8. Count the number of repeat customers.
 
 SELECT COUNT(*) AS repeat_customers  
@@ -119,7 +133,9 @@ FROM orders
 JOIN Customers ON orders.customer_id = customers.customer_id 
 GROUP BY orders.customer_id  
 HAVING COUNT(orders.order_id) > 1;
+```
 
+```sql
 #### 9. Calculate the customer churn rate.
 
 WITH active_customers AS (
@@ -134,7 +150,9 @@ SELECT
     / COUNT(all_customers.customer_id) AS churn_rate
 FROM all_customers
 LEFT JOIN active_customers ON all_customers.customer_id = active_customers.customer_id;
+```
 
+```sql
 #### 10. Find the most popular products in a specific category.
 
 SELECT products.product_id, products.product_name, products.product_category, SUM(orders.quantity)
@@ -145,7 +163,9 @@ WHERE products.product_category = 'Electronics'
 GROUP BY products.product_id, products.product_name, products.product_category
 ORDER BY total_sold DESC
 LIMIT 10;
+```
 
+```sql
 #### 11. Identify products that haven't been sold in the last three months.
 
 SELECT products.product_id, products.product_name, products.product_category
@@ -153,7 +173,9 @@ FROM products
 LEFT JOIN orders ON products.product_id = orders.product_id 
 AND orders.order_date >= DATE_SUB(CURDATE(), INTERVAL 3 MONTH)
 WHERE orders.product_id IS NULL;
+```
 
+```sql
 #### 12. Calculate the average transaction value for each customer.
 
 SELECT 
@@ -164,7 +186,9 @@ FROM customers
 JOIN transaction ON customers.customer_id = transaction.customer_id
 GROUP BY customers.customer_id, customer_name
 ORDER BY avg_transaction_value DESC;
+```
 
+```sql
 #### 13. Determine the percentage of total revenue contributed by the top 10 customers.
 
 SELECT 
@@ -177,7 +201,9 @@ JOIN transaction ON customers.customer_id = transaction.customer_id
 GROUP BY customers.customer_id, customer_name
 ORDER BY total_spent DESC
 LIMIT 10;
+```
 
+```sql
 #### 14. Identify the days with the highest number of sales.
 
 SELECT 
@@ -187,7 +213,9 @@ FROM orders
 GROUP BY order_date
 ORDER BY total_sales DESC
 LIMIT 10;
+```
 
+```sql
 #### 15. Calculate the average number of products included in each order
 
 SELECT 
@@ -198,10 +226,11 @@ AS product_count
 FROM orders
 GROUP BY order_id
     ) AS order_product_counts;
-
+```
 
 ---
 ## SQL Queries for Customer Segmentation
+```sql
 ### New Customers
 > I ran query for Customers who made their first (and possibly only) purchase recently,let's say within the last 30 days.
 
@@ -210,7 +239,9 @@ FROM Customers
 JOIN Orders ON customers.customer_id = orders.customer_id
 GROUP BY customers.customer_id, customers.customer_name
 HAVING first_purchase_date >= CURDATE() - INTERVAL 30 DAY;
+```
 
+```sql
 ### Repeat Customers
 > I also checked for Customers who have placed more than one order.
 
@@ -220,7 +251,9 @@ JOIN Orders ON customers.customer_id = orders.customer_id
 GROUP BY customers.customer_id, customers.customer_name
 HAVING number_of_orders > 1
 ORDER BY number_of_orders DESC;
+```
 
+```sql
 ### High-Value Customers
 > Customers who have spent the most money usually define a threshold like top 10%.
 
@@ -230,9 +263,11 @@ JOIN Orders ON customers.customer_id = orders.customer_id
 GROUP BY customers.customer_id, customers.customer_name
 ORDER BY total_spent DESC
 LIMIT 10;
-
+```
 ---
 ## SQL Queries for Time Series Sales Analysis
+
+```sql
 ### Monthly Revenue
 
 SELECT 
@@ -241,6 +276,9 @@ SELECT
 FROM Orders
 GROUP BY month
 ORDER BY month;
+```
+
+```sql
 ### Quarterly Revenue
 
 SELECT 
@@ -249,6 +287,9 @@ SELECT
 FROM Orders
 GROUP BY quarter
 ORDER BY quarter;
+```
+
+```sql
 ### Identify Peak Sales Months
 
 SELECT 
@@ -258,11 +299,12 @@ FROM Orders
 GROUP BY month
 ORDER BY monthly_revenue DESC
 LIMIT 3;
-
+```
 
 ---
 ## SQL Queries for Product Analysis
-
+```sql
+### Identify Best-Selling Products by Category
 SELECT 
     products.category,
     products.product_name,
@@ -271,7 +313,9 @@ FROM Products
 JOIN Orders ON products.product_id = orders.product_id
 GROUP BY products.category, products.product_name
 ORDER BY products.category, total_units_sold DESC;
+```
 
+```sql
 ### Find Products with Declining Sales
 
 SELECT 
@@ -282,11 +326,15 @@ FROM Products
 JOIN Orders ON products.product_id = orders.product_id
 GROUP BY products.product_name
 HAVING this_year_sales < last_year_sales;
+```
+
+```sql
 ### Determine Average Order Size
 
 SELECT 
     AVG(quantity) AS average_order_size
 FROM Orders;
+```
 
 ---
 ## Conclusion
