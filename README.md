@@ -1,5 +1,5 @@
 # SQL-PROJECTS
-This repository contains all SQL projects completed
+This repository contains all SQL projects completed in SQL
 ## E-Commerce Data Analysis
 ## Project Overview
 > This project analyzes an E-commerce business database consisting of customers, products, and orders datasets. Using MySQL, we import, clean, optimize, and generate insightful business reports that could help management in decision-making.
