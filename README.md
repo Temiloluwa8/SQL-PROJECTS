@@ -10,7 +10,7 @@ This repository contains all SQL projects completed in SQL
 + Performance optimization
 + Reporting insights
 ## Data Source: 
-+ www.kaggle.com
++ was given to me by the company
 ## Tools Used:
 #### My sql workbench: 
        1. was used to store customer, product, and order data.
